@@ -10,7 +10,9 @@ import androidx.viewpager.widget.ViewPager;
 import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     AdapterRelay adapter;
@@ -38,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button btn_logout, btn_R1, btn_R2, btn_switch;
     int swipe;
-    TextView temp;
+    TextView temp, nama;
     String uid;
     DatabaseReference db;
+    CircleImageView photo;
     int Relay[]= new int[8];
     String Rid[] = {"R1","R2","R3","R4","R5","R6","R7","R8"};
     @Override
@@ -48,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         models = new ArrayList<>();
         for (int i=0;i <8;i++){
             models.add(new ModelRelay(Rid[i], "RELAY " + Integer.toString(i+1), 1));
         }
 //        models.add(new ModelRelay("R1", "RELAY 1", 1));
-//        models.add(new ModelRelay("R2", "RELAY 2", 1));
-//        models.add(new ModelRelay("R3", "RELAY 3", 1));
 
         adapter = new AdapterRelay(models, this);
 
@@ -70,32 +75,20 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference("smart_security").child(uid);
 
         btn_logout = findViewById(R.id.logout);
+        nama = findViewById(R.id.nama);
+        photo = findViewById(R.id.profile_image);
+
+        nama.setText(mAuth.getCurrentUser().getDisplayName());
+
+//        photo.setImageURI(Uri.parse("https:/lh3.googleusercontent.com/-nly3UUOwTuE/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rdL9mQhAwkSWlGN9v3oahrpa0gXsg/s96-c/photo.jpg"));
+        Glide.with(this).load(mAuth.getCurrentUser().getPhotoUrl()).into(photo);
+        Log.e("photo", String.valueOf(mAuth.getCurrentUser().getPhotoUrl()));
         temp = findViewById(R.id.temp);
         temp.setText( "19" + (char) 0x00B0 );
         btn_switch = findViewById(R.id.btn_switch);
 
         btn_logout.setOnClickListener(v -> logout());
         btn_switch.setOnClickListener(v -> relayclick());
-
-//        btn_setdb.setOnClickListener(v -> setdb());
-
-//        btn_R1.setOnClickListener(v -> setR1());
-//        btn_R2.setOnClickListener(v -> setR2());
-
-//        db.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Relay[0] = dataSnapshot.child("R1").getValue(int.class);
-//                Relay[1] = dataSnapshot.child("R2").getValue(int.class);
-//                btn_R1.setText(Integer.toString(Relay[0]));
-//                btn_R2.setText(Integer.toString(Relay[1]));
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
                             Relay[i] = dataSnapshot.child(Rid[i]).getValue(int.class);
                         }
 
-//                        btn_R1.setText(Integer.toString(Relay[0]));
-//                        btn_R2.setText(Integer.toString(Relay[1]));
 
                         if (Relay[swipe] == 1){
                             btn_switch.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_switch_on));
@@ -134,38 +125,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        db.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                Toast.makeText(MainActivity.this, "CHILD ADDED", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-////                Relay[0] = dataSnapshot.child("R1").getValue(int.class);
-////                Relay[1] = dataSnapshot.child("R2").getValue(int.class);
-////                btn_R1.setText(Integer.toString(Relay[0]));
-////                btn_R2.setText(Integer.toString(Relay[1]));
-//                Toast.makeText(MainActivity.this, "CHILD CHANGE" , Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
 
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -183,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     btn_switch.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_switch_off));
                 }
-
-//                Toast.makeText(MainActivity.this, Integer.toString(position) , Toast.LENGTH_SHORT).show();
             }
 
             @Override
