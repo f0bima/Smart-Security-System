@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Smart Security System</string>
-    <string name="loginmsg">Google Logn</string>
+    <string name="loginmsg">Google Login</string>
     <string name="login_google">Login Dengan Google</string>
     <string name="logut">Logout</string>
     <string name="Set_DB">Setting DB</string>

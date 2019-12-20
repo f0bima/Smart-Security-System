@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference db;
     CircleImageView photo;
     int Relay[]= new int[8];
+    int kunci, magnet;
     String Rid[] = {"R1","R2","R3","R4","R5","R6","R7","R8"};
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
@@ -110,8 +111,9 @@ public class MainActivity extends AppCompatActivity {
 
         btn_switch = findViewById(R.id.btn_switch);
 
-        btn_logout.setOnClickListener(v -> logout());
+
         btn_switch.setOnClickListener(v -> relayclick());
+        photo.setOnClickListener(v -> logout());
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
                         celcius = dataSnapshot.child("temp").getValue(int.class);
                         hg = dataSnapshot.child("humadity").getValue(int.class);
+                        kunci = dataSnapshot.child("kunci").getValue(int.class);
+                        magnet = dataSnapshot.child("magnet").getValue(int.class);
                         temp.setText( Integer.toString(celcius) + (char) 0x00B0 );
                         humadity.setText(Integer.toString(hg));
 
@@ -206,12 +210,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void kunci(){
+        if (kunci == 1) {
+            db.child("kunci").setValue(0);
+        }
+        else {
+            db.child("kunci").setValue(1);
+        }
+    }
+
     private BiometricPrompt.PromptInfo buildBiometricPrompt() {
         return new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Login")
-                .setSubtitle("Login into your account")
-                .setDescription("Touch your finger on the finger print sensor to authorise your account.")
-                .setNegativeButtonText("Cancel")
+                .setTitle("Buka Pintu")
+                .setSubtitle("Biometric Mode")
+                .setNegativeButtonText("Batal")
                 .build();
     }
 
@@ -226,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) { // 4
             super.onAuthenticationSucceeded(result);
             toast("Authentication succeed");
+            kunci();
         }
 
         @Override
@@ -247,6 +260,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.item1:
                     Toast.makeText(MainActivity.this, "Switch" , Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, KeyPassActivity.class);
+                    startActivity(intent);
                     break;
 
                 case R.id.item2:
