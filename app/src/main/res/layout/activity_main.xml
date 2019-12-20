@@ -196,13 +196,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center">
+
                 <Button
                     android:id="@+id/btn_switch"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:background="@drawable/button_switch_off"/>
+                    android:background="@drawable/button_switch_off" />
 
-<!--                <TextView-->
+                <!--                <TextView-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:text="Switch ON"-->
