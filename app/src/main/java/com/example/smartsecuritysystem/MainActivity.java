@@ -3,16 +3,22 @@ package com.example.smartsecuritysystem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.animation.ArgbEvaluator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -21,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,28 +39,45 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+
     ViewPager viewPager;
     AdapterRelay adapter;
     List<ModelRelay> models;
     Context context;
     FirebaseAuth mAuth;
     Button btn_logout, btn_R1, btn_R2, btn_switch;
-    int swipe;
-    TextView temp, nama;
+    int swipe, hg, celcius;
+    TextView temp, nama, humadity;
     String uid;
     DatabaseReference db;
     CircleImageView photo;
     int Relay[]= new int[8];
+    int kunci, magnet;
     String Rid[] = {"R1","R2","R3","R4","R5","R6","R7","R8"};
+    BiometricPrompt biometricPrompt;
+    BiometricPrompt.PromptInfo promptInfo;
+    Executor executor;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomnav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+
+        executor = new MainThreadExecutor();
+
+        if (biometricPrompt == null)
+            biometricPrompt = new BiometricPrompt(this, executor, callback);
 
         models = new ArrayList<>();
         for (int i=0;i <8;i++){
@@ -80,15 +104,16 @@ public class MainActivity extends AppCompatActivity {
 
         nama.setText(mAuth.getCurrentUser().getDisplayName());
 
-//        photo.setImageURI(Uri.parse("https:/lh3.googleusercontent.com/-nly3UUOwTuE/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rdL9mQhAwkSWlGN9v3oahrpa0gXsg/s96-c/photo.jpg"));
         Glide.with(this).load(mAuth.getCurrentUser().getPhotoUrl()).into(photo);
         Log.e("photo", String.valueOf(mAuth.getCurrentUser().getPhotoUrl()));
         temp = findViewById(R.id.temp);
-        temp.setText( "19" + (char) 0x00B0 );
+        humadity = findViewById(R.id.humidity);
+
         btn_switch = findViewById(R.id.btn_switch);
 
-        btn_logout.setOnClickListener(v -> logout());
+
         btn_switch.setOnClickListener(v -> relayclick());
+        photo.setOnClickListener(v -> logout());
 
         db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -98,11 +123,16 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     try {
-//                        Relay[0] = dataSnapshot.child("R1").getValue(int.class);
-//                        Relay[1] = dataSnapshot.child("R2").getValue(int.class);
                         for (int i=0;i <8;i++){
                             Relay[i] = dataSnapshot.child(Rid[i]).getValue(int.class);
                         }
+
+                        celcius = dataSnapshot.child("temp").getValue(int.class);
+                        hg = dataSnapshot.child("humadity").getValue(int.class);
+                        kunci = dataSnapshot.child("kunci").getValue(int.class);
+                        magnet = dataSnapshot.child("magnet").getValue(int.class);
+                        temp.setText( Integer.toString(celcius) + (char) 0x00B0 );
+                        humadity.setText(Integer.toString(hg));
 
 
                         if (Relay[swipe] == 1){
@@ -164,8 +194,11 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i<8; i++){
             db.child(Rid[i]).setValue(0);
         }
-//        db.child("R1").setValue(1);
-//        db.child("R2").setValue(1);
+        db.child("temp").setValue(22);
+        db.child("humadity").setValue(40);
+        db.child("kunci").setValue(1);
+        db.child("magnet").setValue(0);
+
     }
 
     private void relayclick(){
@@ -175,5 +208,73 @@ public class MainActivity extends AppCompatActivity {
         else {
             db.child(Rid[swipe]).setValue(1);
         }
+    }
+
+    private void kunci(){
+        if (kunci == 1) {
+            db.child("kunci").setValue(0);
+        }
+        else {
+            db.child("kunci").setValue(1);
+        }
+    }
+
+    private BiometricPrompt.PromptInfo buildBiometricPrompt() {
+        return new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Buka Pintu")
+                .setSubtitle("Biometric Mode")
+                .setNegativeButtonText("Batal")
+                .build();
+    }
+
+    private BiometricPrompt.AuthenticationCallback callback = new BiometricPrompt.AuthenticationCallback() {  // 1
+        @Override
+        public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {  // 2
+//            if (errorCode == ERROR_NEGATIVE_BUTTON && biometricPrompt != null)
+//                biometricPrompt.cancelAuthentication();  // 3
+//            toast(errString.toString());
+        }
+        @Override
+        public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) { // 4
+            super.onAuthenticationSucceeded(result);
+            toast("Authentication succeed");
+            kunci();
+        }
+
+        @Override
+        public void onAuthenticationFailed() {  // 5
+            super.onAuthenticationFailed();
+            toast("\"Application did not recognize the placed finger print. Please try again!\"");
+
+        }
+    };
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            Fragment selectedFragment = null;
+            switch (menuItem.getItemId()){
+                case R.id.item0:
+                    Toast.makeText(MainActivity.this, "Home" , Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.item1:
+                    Toast.makeText(MainActivity.this, "Switch" , Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, KeyPassActivity.class);
+                    startActivity(intent);
+                    break;
+
+                case R.id.item2:
+                    promptInfo = buildBiometricPrompt();
+                    biometricPrompt.authenticate(promptInfo);
+                    break;
+            }
+//            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment, selectedFragment).commit();
+            return true;
+        }
+    };
+
+    private void toast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
