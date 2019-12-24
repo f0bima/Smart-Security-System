@@ -228,28 +228,28 @@
             </LinearLayout>
 
             <Button
-                android:visibility="invisible"
+                android:id="@+id/logout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/logout"/>
+                android:layout_height="72dp"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/Fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomnav"
-        android:id="@+id/Fragment"/>
+        android:layout_above="@id/bottomnav" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomnav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_nav"
-        android:background="@drawable/bottom_nav">
+        android:background="@drawable/bottom_nav"
+        app:menu="@menu/bottom_nav">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 </RelativeLayout>

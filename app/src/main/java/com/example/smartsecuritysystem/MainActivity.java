@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Date anotherCurDate = new Date();
-        SimpleDateFormat formatdays = new SimpleDateFormat("H");
-        int formatdaysString = Integer.parseInt(formatdays.format(anotherCurDate));
+        //SimpleDateFormat formatdays = new SimpleDateFormat("H");
+        //int formatdaysString = Integer.parseInt(formatdays.format(anotherCurDate));
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy '|' H:mm");
         String formattedDateString = formatter.format(anotherCurDate);
         mydate = findViewById(R.id.waktu);

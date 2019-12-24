@@ -6,4 +6,5 @@
     <color name="white">#ffffff</color>
     <color name="bg">#F5F6FC</color>
     <color name="nav_icon">#873CFF</color>
+    <color name="Trans60">#4D000000</color>
 </resources>
