@@ -7,8 +7,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_paddingLeft="20dp"
-        android:layout_paddingRight="20dp"
+
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -59,30 +60,41 @@
                 />
 
             <EditText
-                android:id="@+id/txt_passApp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@+id/txt_UserID"
-                android:ems="10"
-                android:hint="Password Aplikasi Baru"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp" />
-
-            <EditText
                 android:id="@+id/txt_passUid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txt_passApp"
+                android:layout_below="@+id/txt_UserID"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="10dp"
                 android:ems="10"
                 android:hint="Password User ID"
                 android:inputType="textPassword"
                 android:paddingLeft="10dp" />
+
+            <EditText
+                android:id="@+id/txt_passApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/txt_passUid"
+                android:ems="10"
+                android:hint="Password Aplikasi Baru"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_passApp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/biometric_error_color"
+                android:textSize="8sp"
+                android:text="*Jika tidak ingin mengganti password Aplikasi, Kosongkan saja"
+                />
+
+
 
             <Button
                 android:id="@+id/btn_updatePass"

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button btn_logout, btn_R1, btn_R2, btn_switch;
     int swipe, hg, celcius;
-    TextView temp, nama, humadity, mydate;
+    TextView temp, nama, humadity, mydate, sapaan;
     String uid;
     DatabaseReference db;
     CircleImageView photo;
@@ -105,8 +105,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         Date anotherCurDate = new Date();
-        //SimpleDateFormat formatdays = new SimpleDateFormat("H");
-        //int formatdaysString = Integer.parseInt(formatdays.format(anotherCurDate));
+        SimpleDateFormat formatjam = new SimpleDateFormat("H");
+        int Jam = Integer.parseInt(formatjam.format(anotherCurDate));
+        sapaan = (TextView) findViewById(R.id.txt_sapaanWaktu);
+        sapaan.setText("Good " + myTimes(Jam) );
+
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy '|' H:mm");
         String formattedDateString = formatter.format(anotherCurDate);
         mydate = findViewById(R.id.waktu);
@@ -272,6 +276,21 @@ public class MainActivity extends AppCompatActivity {
 //            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment, selectedFragment).commit();
             return true;
         }
+    };
+
+    public String myTimes(int i){
+        String x = "Morning";
+
+        if ((i > 3) && (i < 13)){
+            x = "Morning";
+        }else if ((i > 12) && (i < 18)){
+            x = "Afternoon";
+        }else if ((i > 17) && (i < 21)){
+            x = "Evening";
+        }else {
+            x = "Night";
+        }
+        return x;
     };
 
     private void toast(String text) {
