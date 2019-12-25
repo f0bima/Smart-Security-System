@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (kunci == 1){
                             kunci_img.setImageResource(R.drawable.ic_lock_open_foreground);
-                            magnet_text.setText("Unlocked");
+                            kunci_text.setText("Unlocked");
                         }
                         else {
                             kunci_img.setImageResource(R.drawable.ic_lock_foreground);
