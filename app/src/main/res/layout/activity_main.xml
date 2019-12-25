@@ -49,6 +49,7 @@
                         android:layout_height="wrap_content"
                         android:text="11 Januari 2019 | 10:20"
                         android:format12Hour="dd MMMM yyyy | H:mm"
+                        android:format24Hour="dd MMMM yyyy | H:mm"
                         android:textSize="15sp"/>
 
                 </LinearLayout>
