@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
         sapaan.setText("Good " + myTimes(Jam) );
 
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy '|' H:mm");
-        String formattedDateString = formatter.format(anotherCurDate);
-        mydate = findViewById(R.id.waktu);
-        mydate.setText(formattedDateString);
+//        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy '|' H:mm");
+//        String formattedDateString = formatter.format(anotherCurDate);
+//        mydate = findViewById(R.id.waktu);
+//        mydate.setText(formattedDateString);
 
 
 
