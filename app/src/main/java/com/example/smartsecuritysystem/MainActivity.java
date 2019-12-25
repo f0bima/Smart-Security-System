@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,16 +42,17 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     Button btn_logout, btn_R1, btn_R2, btn_switch;
     int swipe, hg, celcius;
-    TextView temp, nama, humadity, mydate, sapaan;
+    TextView temp, nama, humadity, mydate, sapaan, magnet_text, kunci_text;
     String uid;
     DatabaseReference db;
     CircleImageView photo;
     int Relay[]= new int[8];
-    int kunci, magnet;
-    String Rid[] = {"R1","R2","R3","R4","R5","R6","R7","R8"};
+    int kunci, magnet, pass;
+    String Rid[] = {"R1","R2","R3","R4","R5","R6","R7"};
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
     Executor executor;
+    ImageView magnet_img, kunci_img;
 
 
     @Override
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             biometricPrompt = new BiometricPrompt(this, executor, callback);
 
         models = new ArrayList<>();
-        for (int i=0;i <8;i++){
+        for (int i=0;i <7;i++){
             models.add(new ModelRelay(Rid[i], "RELAY " + Integer.toString(i+1), 1));
         }
 //        models.add(new ModelRelay("R1", "RELAY 1", 1));
@@ -89,11 +91,16 @@ public class MainActivity extends AppCompatActivity {
         btn_logout = findViewById(R.id.logout);
         nama = findViewById(R.id.nama);
         photo = findViewById(R.id.profile_image);
+        magnet_text = findViewById(R.id.magnet);
+        kunci_text = findViewById(R.id.doorlock);
+        magnet_img = findViewById(R.id.magnet_img);
+        kunci_img = findViewById(R.id.doorlock_img);
 
         nama.setText(mAuth.getCurrentUser().getDisplayName());
 
         Glide.with(this).load(mAuth.getCurrentUser().getPhotoUrl()).into(photo);
         Log.e("photo", String.valueOf(mAuth.getCurrentUser().getPhotoUrl()));
+
         temp = findViewById(R.id.temp);
         humadity = findViewById(R.id.humidity);
 
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     try {
-                        for (int i=0;i <8;i++){
+                        for (int i=0;i <7;i++){
                             Relay[i] = dataSnapshot.child(Rid[i]).getValue(int.class);
                         }
 
@@ -137,7 +144,25 @@ public class MainActivity extends AppCompatActivity {
                         magnet = dataSnapshot.child("magnet").getValue(int.class);
                         temp.setText( Integer.toString(celcius) + (char) 0x00B0 );
                         humadity.setText(Integer.toString(hg));
+                        pass = dataSnapshot.child("pass").getValue(int.class);
 
+                        if (magnet == 0){
+                            magnet_img.setImageResource(R.drawable.close_door);
+                            magnet_text.setText("Closed");
+                        }
+                        else {
+                            magnet_img.setImageResource(R.drawable.open_door);
+                            magnet_text.setText("Open");
+                        }
+
+                        if (kunci == 1){
+                            kunci_img.setImageResource(R.drawable.ic_lock_open_foreground);
+                            magnet_text.setText("Unlocked");
+                        }
+                        else {
+                            kunci_img.setImageResource(R.drawable.ic_lock_foreground);
+                            kunci_text.setText("Locked");
+                        }
 
                         if (Relay[swipe] == 1){
                             btn_switch.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_switch_on));
@@ -195,14 +220,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setdb(){
-        for (int i = 0; i<8; i++){
+        for (int i = 0; i<7; i++){
             db.child(Rid[i]).setValue(0);
         }
         db.child("temp").setValue(22);
         db.child("humadity").setValue(40);
         db.child("kunci").setValue(1);
         db.child("magnet").setValue(0);
-
+        db.child("pass").setValue(0);
     }
 
     private void relayclick(){
