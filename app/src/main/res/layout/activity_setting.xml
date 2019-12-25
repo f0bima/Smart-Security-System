@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:gravity="center_horizontal"
@@ -31,73 +30,165 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="300dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:text="User Id : 12345678" />
+                android:layout_marginLeft="20dp"
+                android:text="SSID: 12345678" />
 
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:padding="15dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="15dp">
 
-            <EditText
-                android:id="@+id/txt_UserID"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-                android:hint="User ID"
-                android:inputType="textPersonName"
-                android:paddingLeft="10dp"
+                android:id="@+id/Passapp"
+                android:text="Set Key Pass"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
                 />
 
             <EditText
-                android:id="@+id/txt_passUid"
-                android:layout_width="match_parent"
+                android:id="@+id/txt_UpdatepassApp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txt_UserID"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-                android:hint="Password User ID"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp" />
-
-            <EditText
-                android:id="@+id/txt_passApp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@+id/txt_passUid"
+                android:layout_below="@+id/Passapp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:hint="Password Aplikasi Baru"
                 android:inputType="textPassword"
                 android:paddingLeft="10dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:layout_toRightOf="@id/txt_UpdatepassApp"
+                android:layout_below="@+id/Passapp"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btn_updateKeyPass"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:padding="15dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txt_passApp"
-                android:layout_marginLeft="10dp"
-                android:textColor="@color/biometric_error_color"
-                android:textSize="8sp"
-                android:text="*Jika tidak ingin mengganti password Aplikasi, Kosongkan saja"
+                android:id="@+id/PassSSID"
+                android:text="Ganti Password SSID"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
                 />
 
+            <EditText
+                android:id="@+id/txt_updatepassUid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/PassSSID"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:ems="10"
+                android:hint="Password Baru User ID"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:layout_toRightOf="@id/txt_updatepassUid"
+                android:layout_below="@+id/PassSSID"
+                android:layout_marginTop="14dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btn_updateSSIDKey"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:padding="15dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/SSID"
+                android:text="Setting SSID"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                />
+
+            <EditText
+                android:id="@+id/txt_UserID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@id/SSID"
+                android:ems="10"
+                android:hint="User ID"
+                android:inputType="textPersonName"
+                android:paddingLeft="10dp" />
+
+            <EditText
+                android:id="@+id/txt_passUid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_UserID"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:ems="10"
+                android:hint="Password Baru User ID"
+                android:inputType="textPassword"
+                android:paddingLeft="10dp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set"
+                android:layout_toRightOf="@id/txt_UserID"
+                android:layout_below="@+id/SSID"
+                android:layout_marginTop="45dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btn_setSSID"                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/SaveAll"
+                android:text="Setting Project Bucket"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                />
 
             <Button
-                android:id="@+id/btn_updatePass"
+                android:id="@+id/btn_UpdateAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -106,13 +197,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="UBAH" />
+                android:text="SAVE" />
         </RelativeLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
 
 </LinearLayout>
