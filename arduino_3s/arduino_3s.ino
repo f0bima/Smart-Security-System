@@ -27,9 +27,11 @@ void setup() {
     write_String(ssid_add, "SSID");
     write_String(pass_add, "PASSWORD");
     write_String(pb_add, "PROJECT BUCKET");
+    write_String(pass_ssid_add, "admin123");        
   }
   
   pinMode(led, OUTPUT);
+  pinMode(magnet, INPUT_PULLUP);
 
   WiFi.mode(WIFI_AP_STA);      
   WiFi.begin(string2char(read_String(ssid_add)), string2char(read_String(pass_add))); 
@@ -38,7 +40,8 @@ void setup() {
   
   server.on("/", handleRoot);  
   server.on("/login", handleLogin);
-  server.on("/setting", handleSetting);  
+  server.on("/sett_ssid", handleSetting);  
+  server.on("/setpass", handlepass);  
   server.on("/pb_set", handlePb_set);  
   server.on("/projectbucket", handleProjectbucket);  
   server.on("/style.css", handleCss);  
@@ -49,43 +52,67 @@ void setup() {
   
   server.begin();
   WiFi.softAPConfig(ip, gateway, subnet);  
-  WiFi.softAP(ssid, pass);
+  WiFi.softAP(ssid, string2char(read_String(pass_ssid_add)));
 }
 
 
 void loop() {
+  unsigned long currentMillis = millis();
   if(WiFi.status() != WL_CONNECTED) {
-    pinMode(led, 1);
+    digitalWrite(led, 1);
     delay(500);
-    pinMode(led, 0);
+    digitalWrite(led, 0);
     delay(500);
   }
   
-  else{  
-    pinMode(led, 0);
+  else{      
+    digitalWrite(led, 0);
+    temp = dht.readTemperature();
+    humadity = dht.readHumidity();        
+    
+    if (!isnan(humadity) || !isnan(temp)) {
+//      Firebase.setInt("smart_security/" + read_String(pb_add) + "/temp", -99);
+//      Firebase.setInt("smart_security/" + read_String(pb_add) + "/humadity", -99);
+//      return;
+//    }
+//    else{
+      Firebase.setInt("smart_security/" + read_String(pb_add) + "/temp", round(temp));
+      Firebase.setInt("smart_security/" + read_String(pb_add) + "/humadity", round(humadity));    
+    }
 
-    for(int i = 0; i<8; i++){
+    for(int i = 0; i<7; i++){
       String str = "smart_security/" + read_String(pb_add) + field[i];     
       int stt = Firebase.getInt(str);
       sr.set(i, stt);
     }
+
+    String str = "smart_security/" + read_String(pb_add) + field[7];     
+    int stt_lock = Firebase.getInt(str);
+    if (stt_lock==1 && lockchange==false){
+      sr.set(7, stt_lock);
+      lockstate = true;
+      previousMillis = millis();
+      lockchange = true;
+//      Serial.println("UNLOCK");
+    }     
+
+//    Serial.println((unsigned long)(currentMillis - previousMillis));
+    unsigned long dl = (unsigned long)(currentMillis - previousMillis);
+    if (lockstate==true && (unsigned long)dl >= interval && (unsigned long) dl <= 20000) {         
+//      Serial.println("Lock");
+      sr.set(7, 0);
+      Firebase.setInt("smart_security/" + read_String(pb_add) + "/kunci", 0);
+      lockstate = false;
+      lockchange = false;
+    }      
     
-    temp = dht.readTemperature();
-    humadity = dht.readHumidity();        
+    Firebase.setInt("smart_security/" + read_String(pb_add) + "/magnet", digitalRead(magnet));
     
-    if (isnan(humadity) || isnan(temp)) {
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/temp", -99);
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/humadity", -99);
-      return;
-    }
-    else{
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/temp", round(temp));
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/humadity", round(humadity));    
-    }
+    
     
     sr.updateRegisters();    
   }  
   
   server.handleClient();
-  delay(100);  
+//  delay(100);  
 }

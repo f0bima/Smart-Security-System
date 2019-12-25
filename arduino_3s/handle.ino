@@ -96,3 +96,16 @@ void handlePb_set(){
   }  
 }
 
+void handlepass(){
+  if (server.hasArg("pass")){
+//    write_String(pb_add, server.arg("pb"));        
+//    Serial.println(read_String(pb_add));
+    write_String(pass_ssid_add, server.arg("pass"));        
+    WiFi.softAP(ssid, string2char(read_String(pass_ssid_add)));
+    server.send_P(200, "text/html", berhasil);    
+  }
+  else{
+    server.send(200, "text/html", "OPS");
+  }  
+}
+
