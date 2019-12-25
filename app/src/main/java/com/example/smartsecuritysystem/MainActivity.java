@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference db;
     CircleImageView photo;
     int Relay[]= new int[8];
-    int kunci, magnet, pass;
+    int kunci, magnet;
+    public static int pass;
     String Rid[] = {"R1","R2","R3","R4","R5","R6","R7"};
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
@@ -212,6 +213,19 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, email,Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String key = data.getStringExtra("key");
+//        Toast.makeText(this, key,Toast.LENGTH_SHORT).show();
+        if (Integer.parseInt(key) == pass){
+            kunci_lock();
+        }
+        else {
+            Toast.makeText(this, "PassKey Failed" ,Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void logout(){
         AuthActivity.Logout();
         Intent intent = new Intent(MainActivity.this, AuthActivity.class);
@@ -239,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void kunci(){
+    public void kunci_lock(){
         if (kunci == 1) {
             db.child("kunci").setValue(0);
         }
@@ -267,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) { // 4
             super.onAuthenticationSucceeded(result);
             toast("Authentication succeed");
-            kunci();
+            kunci_lock();
         }
 
         @Override
@@ -290,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.item1:
                     Toast.makeText(MainActivity.this, "Switch" , Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, KeyPassActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,1000);
                     break;
 
                 case R.id.item2:

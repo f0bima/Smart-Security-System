@@ -14,8 +14,9 @@
         android:layout_height="match_parent"
         android:padding="10dp"
         android:textColor="#fff"
-        android:text="aa"
-        android:password="false"
+        android:hint="Masukan PassKey"
+        android:textColorHint="#fff"
+        android:password="true"
         android:textSize="40dp"
         android:gravity="center"/>
 

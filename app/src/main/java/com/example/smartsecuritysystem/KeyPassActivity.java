@@ -2,6 +2,7 @@ package com.example.smartsecuritysystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -57,7 +58,7 @@ public class KeyPassActivity extends AppCompatActivity {
     private void num(Button v){
         String s = v.getText().toString();
         if (count<6){
-            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             key[count] = s;
             count++;
         }
@@ -79,12 +80,14 @@ public class KeyPassActivity extends AppCompatActivity {
         for (int i=0; i< count; i++){
             s = s + key[i];
         }
-
         tv.setText(s);
     }
 
     void enter(){
-
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("key",tv.getText());
+        setResult(1000, i);
+        finish();
     }
 
     void delete(){
