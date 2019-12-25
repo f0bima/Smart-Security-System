@@ -43,11 +43,12 @@
                         android:text="Good Morning"
                         android:textSize="20dp"/>
 
-                    <TextView
+                    <TextClock
                         android:id="@+id/waktu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="11 Januari 2019 | 10:20"
+                        android:format12Hour="dd MMMM yyyy | H:mm"
                         android:textSize="15sp"/>
 
                 </LinearLayout>
