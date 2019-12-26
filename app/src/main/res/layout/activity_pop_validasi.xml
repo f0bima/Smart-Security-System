@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Masukkan Password"
                 android:inputType="numberPassword"
-                android:maxLength="8"
+                android:maxLength="6"
                 />
 
             <Button
