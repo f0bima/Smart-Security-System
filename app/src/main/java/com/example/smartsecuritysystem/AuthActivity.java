@@ -3,12 +3,15 @@ package com.example.smartsecuritysystem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,13 +71,28 @@ public class AuthActivity extends AppCompatActivity {
 //            Toast.makeText(AuthActivity.this, "SUDAH LOGIN",Toast.LENGTH_SHORT).show();
             openMainAct();
         }
-
+        cekKoneksi();
     }
 
     public void SignInGoogle() {
-        progressBar.setVisibility(View.VISIBLE);
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+        if (conMgr.getActiveNetworkInfo() == null
+                || conMgr.getActiveNetworkInfo().isConnected() == false){
+            Toast.makeText(AuthActivity.this, "Cek Koneksi Anda Terlebih Dahulu",Toast.LENGTH_SHORT).show();
+        }else {
+            progressBar.setVisibility(View.VISIBLE);
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
+        }
+    }
+
+
+    public void cekKoneksi(){
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+        if (conMgr.getActiveNetworkInfo() == null
+                || conMgr.getActiveNetworkInfo().isConnected() == false){
+            Toast.makeText(AuthActivity.this, "Anda Tidak Terkoneksi Internet, Cek Koneksi Anda",Toast.LENGTH_SHORT).show();
+        }
     }
 
 //    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {

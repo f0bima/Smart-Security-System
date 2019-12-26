@@ -1,9 +1,12 @@
 package com.example.smartsecuritysystem;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
     Executor executor;
     ImageView magnet_img, kunci_img;
     LinearLayout Dashboard;
-
+    static LinearLayout DashbC;
+    private BroadcastReceiver checkConn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Dashboard = (LinearLayout) findViewById(R.id.DashboardMain);
+        DashbC = (LinearLayout) findViewById(R.id.DashboardMain);
+        checkConn = new ConnectivityReceiver();
+        registerReceiver(checkConn, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomnav);
@@ -216,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         });
         String email = mAuth.getCurrentUser().getEmail();
         Toast.makeText(this, email,Toast.LENGTH_SHORT).show();
-        cekKoneksi(Dashboard);
+        cekKoneksi();
     }
 
     @Override
@@ -349,12 +356,31 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
-    public void cekKoneksi(LinearLayout inv){
+    public void cekKoneksi(){
         ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
         if (conMgr.getActiveNetworkInfo() == null
                 || conMgr.getActiveNetworkInfo().isConnected() == false){
-            inv.setVisibility(LinearLayout.INVISIBLE);
+            Dashboard.setVisibility(LinearLayout.INVISIBLE);
             toast("Cek Koneksi anda, dan Restart Aplikasi");
         }
     }
+
+    public static void CekConnectionRunning(boolean value){
+
+        if(value){
+            Handler handler = new Handler();
+            Runnable delayrunnable = new Runnable() {
+                @Override
+                public void run() {
+                    DashbC.setVisibility(LinearLayout.VISIBLE);
+                }
+            };
+            handler.postDelayed(delayrunnable, 3000);
+        }else {
+            DashbC.setVisibility(LinearLayout.INVISIBLE);
+        }
+    }
+
+
+
 }
