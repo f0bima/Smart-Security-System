@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg">
@@ -33,8 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:layout_marginLeft="20dp"
-                android:text="SSID: 12345678" />
+                android:text="Setting 3S"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -84,121 +84,54 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@color/white"
+            android:background="@color/bg"
+            android:orientation="vertical"
             android:padding="15dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/PassSSID"
-                android:text="Ganti Password SSID"
-                android:textSize="18sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                />
-
-            <EditText
-                android:id="@+id/txt_updatepassUid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/PassSSID"
-                android:layout_marginTop="14dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-                android:hint="Password Baru User ID"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set"
-                android:layout_toRightOf="@id/txt_updatepassUid"
-                android:layout_below="@+id/PassSSID"
-                android:layout_marginTop="14dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/btn_updateSSIDKey"
-                />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/SSID"
-                android:text="Setting SSID"
-                android:textSize="18sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                />
-
-            <EditText
-                android:id="@+id/txt_UserID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@id/SSID"
-                android:ems="10"
-                android:hint="User ID"
-                android:inputType="textPersonName"
-                android:paddingLeft="10dp" />
-
-            <EditText
-                android:id="@+id/txt_passUid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txt_UserID"
-                android:layout_marginTop="14dp"
-                android:layout_marginRight="10dp"
-                android:ems="10"
-                android:hint="Password Baru User ID"
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Set"
-                android:layout_toRightOf="@id/txt_UserID"
-                android:layout_below="@+id/SSID"
-                android:layout_marginTop="45dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/btn_setSSID"                />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:padding="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/SaveAll"
-                android:text="Setting Project Bucket"
+                android:id="@+id/pbtv"
+                android:text="Set Key Pass"
                 android:textSize="18sp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
                 />
 
             <Button
-                android:id="@+id/btn_UpdateAll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="10dp"
+                android:text="Set Project Bucket"
+                android:layout_below="@+id/pbtv"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="20dp"
-                android:text="SAVE" />
+                android:id="@+id/set_projectbucket"
+                android:background="@drawable/round_bg"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set SSID"
+                android:background="@drawable/round_bg"
+                android:layout_below="@+id/set_projectbucket"
+                android:layout_marginTop="10dp"
+                android:id="@+id/set_ssid"
+                />
+
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_below="@id/set_ssid"
+                android:text="Pastikan smartphone anda terhubung dengan wifi 3S untuk mensetting projectbucket, password admin, dan jaringan yang akan tersambung pada perangkat 3S"
+                android:lineSpacingExtra="5dp"
+                />
+
         </RelativeLayout>
+
+
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -216,13 +216,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String key = data.getStringExtra("key");
+        try {
+            String key = data.getStringExtra("key");
+
 //        Toast.makeText(this, key,Toast.LENGTH_SHORT).show();
-        if (Integer.parseInt(key) == pass){
-            kunci_lock();
+            if (Integer.parseInt(key) == pass) {
+                kunci_lock();
+            } else {
+                Toast.makeText(this, "PassKey Failed", Toast.LENGTH_SHORT).show();
+            }
         }
-        else {
-            Toast.makeText(this, "PassKey Failed" ,Toast.LENGTH_SHORT).show();
+        catch (Exception e){
+
         }
     }
 
@@ -299,6 +304,8 @@ public class MainActivity extends AppCompatActivity {
             switch (menuItem.getItemId()){
                 case R.id.item0:
                     Toast.makeText(MainActivity.this, "Home" , Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(MainActivity.this, SettingActivity.class);
+                    startActivity(i);
                     break;
 
                 case R.id.item1:

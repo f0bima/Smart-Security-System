@@ -41,6 +41,7 @@ void setup() {
   server.on("/", handleRoot);  
   server.on("/login", handleLogin);
   server.on("/sett_ssid", handleSetting);  
+  server.on("/set_pass", handleset_pass);  
   server.on("/setpass", handlepass);  
   server.on("/pb_set", handlePb_set);  
   server.on("/projectbucket", handleProjectbucket);  
@@ -49,7 +50,7 @@ void setup() {
   const char * headerkeys[] = {"User-Agent","Cookie"} ;
   size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);  
   server.collectHeaders(headerkeys, headerkeyssize );
-  
+  pbstr = read_String(pb_add);
   server.begin();
   WiFi.softAPConfig(ip, gateway, subnet);  
   WiFi.softAP(ssid, string2char(read_String(pass_ssid_add)));
@@ -76,17 +77,17 @@ void loop() {
 //      return;
 //    }
 //    else{
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/temp", round(temp));
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/humadity", round(humadity));    
+      Firebase.setInt("smart_security/" + pbstr + "/temp", round(temp));
+      Firebase.setInt("smart_security/" + pbstr + "/humadity", round(humadity));    
     }
 
     for(int i = 0; i<7; i++){
-      String str = "smart_security/" + read_String(pb_add) + field[i];     
+      String str = "smart_security/" + pbstr + field[i];     
       int stt = Firebase.getInt(str);
       sr.set(i, stt);
     }
 
-    String str = "smart_security/" + read_String(pb_add) + field[7];     
+    String str = "smart_security/" + pbstr + field[7];     
     int stt_lock = Firebase.getInt(str);
     if (stt_lock==1 && lockchange==false){
       sr.set(7, stt_lock);
@@ -101,12 +102,12 @@ void loop() {
     if (lockstate==true && (unsigned long)dl >= interval && (unsigned long) dl <= 20000) {         
 //      Serial.println("Lock");
       sr.set(7, 0);
-      Firebase.setInt("smart_security/" + read_String(pb_add) + "/kunci", 0);
+      Firebase.setInt("smart_security/" + pbstr + "/kunci", 0);
       lockstate = false;
       lockchange = false;
     }      
     
-    Firebase.setInt("smart_security/" + read_String(pb_add) + "/magnet", digitalRead(magnet));
+    Firebase.setInt("smart_security/" + pbstr + "/magnet", digitalRead(magnet));
     
     
     

@@ -16,7 +16,7 @@
 #define setEEPROM false
 boolean lockstate = false;
 boolean lockchange = false;
-
+String pbstr;
 String field[]  = {"/R1","/R2","/R3","/R4","/R5","/R6","/R7","/kunci"};
 float temp, humadity;
 

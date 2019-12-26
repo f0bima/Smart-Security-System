@@ -80,6 +80,10 @@ void handleProjectbucket(){
   server.send_P(200, "text/html", pb);
 }
 
+void handleset_pass(){
+  server.send_P(200, "text/html", admin);
+}
+
 void handlePb_set(){
 //  if (!is_authentified()){
 //    String header = "HTTP/1.1 301 OK\r\nLocation: /login\r\nCache-Control: no-cache\r\n\r\n";
@@ -89,6 +93,7 @@ void handlePb_set(){
   if (server.hasArg("pb")){
     write_String(pb_add, server.arg("pb"));        
     Serial.println(read_String(pb_add));
+    pbstr = read_String(pb_add);
     server.send_P(200, "text/html", berhasil);    
   }
   else{
