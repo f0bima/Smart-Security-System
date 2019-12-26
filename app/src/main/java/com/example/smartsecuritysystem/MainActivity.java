@@ -2,12 +2,14 @@ package com.example.smartsecuritysystem;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,12 +56,15 @@ public class MainActivity extends AppCompatActivity {
     BiometricPrompt.PromptInfo promptInfo;
     Executor executor;
     ImageView magnet_img, kunci_img;
+    LinearLayout Dashboard;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Dashboard = (LinearLayout) findViewById(R.id.DashboardMain);
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomnav);
@@ -211,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         });
         String email = mAuth.getCurrentUser().getEmail();
         Toast.makeText(this, email,Toast.LENGTH_SHORT).show();
+        cekKoneksi(Dashboard);
     }
 
     @Override
@@ -343,5 +349,12 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
-
+    public void cekKoneksi(LinearLayout inv){
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+        if (conMgr.getActiveNetworkInfo() == null
+                || conMgr.getActiveNetworkInfo().isConnected() == false){
+            inv.setVisibility(LinearLayout.INVISIBLE);
+            toast("Cek Koneksi anda, dan Restart Aplikasi");
+        }
+    }
 }

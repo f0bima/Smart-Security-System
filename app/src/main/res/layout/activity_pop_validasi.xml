@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:background="@color/white"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -34,8 +34,10 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password Email"
-                android:inputType="textPassword"/>
+                android:hint="Masukkan Password"
+                android:inputType="numberPassword"
+                android:maxLength="8"
+                />
 
             <Button
                 android:layout_width="match_parent"
