@@ -34,6 +34,7 @@ import java.util.concurrent.Executor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -60,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
     Executor executor;
     ImageView magnet_img, kunci_img;
     LinearLayout Dashboard;
+    CardView cardbottom;
+    static CardView cardbottomc;
     static LinearLayout DashbC;
     private BroadcastReceiver checkConn;
+    static boolean con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
         Dashboard = (LinearLayout) findViewById(R.id.DashboardMain);
         DashbC = (LinearLayout) findViewById(R.id.DashboardMain);
+        cardbottom = findViewById(R.id.card_bottom);
+        cardbottomc = findViewById(R.id.card_bottom);
         checkConn = new ConnectivityReceiver();
         registerReceiver(checkConn, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
@@ -316,20 +322,30 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
             switch (menuItem.getItemId()){
                 case R.id.item0:
-                    Toast.makeText(MainActivity.this, "Home" , Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "Home" , Toast.LENGTH_LONG).show();
                     Intent i = new Intent(MainActivity.this, SettingActivity.class);
                     startActivity(i);
                     break;
 
                 case R.id.item1:
-                    Toast.makeText(MainActivity.this, "Switch" , Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, KeyPassActivity.class);
-                    startActivityForResult(intent,1000);
+//                    Toast.makeText(MainActivity.this, "Switch" , Toast.LENGTH_LONG).show();
+                    if (con) {
+                        Intent intent = new Intent(MainActivity.this, KeyPassActivity.class);
+                        startActivityForResult(intent, 1000);
+                    }
+                    else {
+                        toast("Cek koneksi anda");
+                    }
                     break;
 
                 case R.id.item2:
-                    promptInfo = buildBiometricPrompt();
-                    biometricPrompt.authenticate(promptInfo);
+                    if (con) {
+                        promptInfo = buildBiometricPrompt();
+                        biometricPrompt.authenticate(promptInfo);
+                    }
+                    else {
+                        toast("Cek koneksi anda");
+                    }
                     break;
             }
 //            getSupportFragmentManager().beginTransaction().replace(R.id.Fragment, selectedFragment).commit();
@@ -361,7 +377,9 @@ public class MainActivity extends AppCompatActivity {
         if (conMgr.getActiveNetworkInfo() == null
                 || conMgr.getActiveNetworkInfo().isConnected() == false){
             Dashboard.setVisibility(LinearLayout.INVISIBLE);
-            toast("Cek Koneksi anda, dan Restart Aplikasi");
+            cardbottom.setVisibility(CardView.INVISIBLE);
+            toast("Cek Koneksi anda");
+            con = false;
         }
     }
 
@@ -373,14 +391,16 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     DashbC.setVisibility(LinearLayout.VISIBLE);
+                    cardbottomc.setVisibility(CardView.VISIBLE);
+                    con = true;
                 }
             };
             handler.postDelayed(delayrunnable, 3000);
         }else {
+            con = false;
             DashbC.setVisibility(LinearLayout.INVISIBLE);
+            cardbottomc.setVisibility(CardView.INVISIBLE);
         }
     }
-
-
 
 }
